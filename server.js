@@ -1,27 +1,28 @@
-// Import the 'ws' library
-const WebSocket = require('ws');
+const express = require('express');
+const { Server } = require("socket.io")
+const { createServer } = require('http')
 
-// Create a WebSocket server
-const wss = new WebSocket.Server({ port: 8080 }); // Replace 8080 with your desired port number
-console.log(wss)
-// Event handler for new WebSocket connections
-wss.on('connection', function connection(ws) {
-  console.log('A new client connected');
+const port = 3030;
 
-  // Event handler for incoming messages from clients
-  ws.on('message', function incoming(message) {
-    console.log('Received: %s', message);
+const app = express(); 
+const server = new createServer(app);
 
-    // Broadcast the message to all connected clients (if needed)
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
-  });
+const io = new Server(server, {
+  cors:{
+    origin:"*"
+  }
+})
 
-  // Event handler for client disconnection
-  ws.on('close', function close() {
-    console.log('A client disconnected');
-  });
-});
+io.on("connection", (socket) => {
+    console.log("User Connected", socket.id)
+    socket.emit("welcome", `Welcome To Server ${socket.id}`)
+    socket.on("message", (data) => {
+      console.log(data);
+    })
+})
+
+
+
+server.listen(port, () => {
+  console.log("App is running")
+})
