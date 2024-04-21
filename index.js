@@ -1,11 +1,15 @@
 const express = require("express");
 const { Server } = require("socket.io");
 const { createServer } = require("http");
+var cors = require('cors');
+
 
 const port = 3030;
 
 const app = express();
 const server = createServer(app);
+
+app.use(cors())
 
 const io = new Server(server, {
   cors: {
@@ -25,6 +29,10 @@ io.on("connection", (socket) => {
     io.emit("VIDEO-STATUS", status); // Emit the updated status to all clients
   });
 });
+
+app.get("/api", (req, res)=>{
+	res.send("Working")
+})
 
 server.listen(port, () => {
   console.log("App is running");
