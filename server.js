@@ -113,6 +113,7 @@ io.on('connection', (socket) => {
   // Handle request to get isNext status
   socket.on('getIsNextStatus', (roomId) => {
     const isNextStatus = getIsNextStatus(roomId);
+    confirm.log(isNextStatus,"IS NEXT");
     socket.emit('currentIsNextStatus', isNextStatus);
   });
 
