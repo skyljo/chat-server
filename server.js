@@ -120,7 +120,7 @@ io.on('connection', (socket) => {
   // Handle request to change isNext status
   socket.on('changeIsNextStatus', (roomId, newStatus) => {
     changeIsNextStatus(roomId, newStatus, socket.id);
-    console.log(newStatus);
+    console.log(newStatus,"---->");
   });
 
   // Handle request to get URL
